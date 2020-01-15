@@ -12,7 +12,7 @@ var (
 type Client struct {
 }
 
-// New creates a new instance of a RouteServiceAPI
+// New creates a new instance of an account client
 func New() *Client {
 	return &Client{}
 }
