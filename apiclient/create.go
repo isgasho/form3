@@ -10,27 +10,27 @@ import (
 )
 
 // Create registers an existing bank account or creates a new one
-func (a *APIClient) Create(account AccountData) (response string, err error) {
+func (a *APIClient) Create(account AccountData) (created AccountData, err error) {
 
 	rel := &url.URL{Path: "/v1/organisation/accounts"}
 	url := a.BaseURL.ResolveReference(rel)
 
-	json, err := json.Marshal(account)
+	jsonPayload, err := json.Marshal(account)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountData{}, err
 	}
 
-	req, err := http.NewRequest("POST", url.String(), bytes.NewBuffer(json))
+	req, err := http.NewRequest("POST", url.String(), bytes.NewBuffer(jsonPayload))
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountData{}, err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountData{}, err
 	}
 
 	defer resp.Body.Close()
@@ -38,8 +38,14 @@ func (a *APIClient) Create(account AccountData) (response string, err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return err.Error(), err
+		return AccountData{}, err
 	}
 
-	return string(body), nil
+	err = json.Unmarshal(body, &created)
+	if err != nil {
+		log.Println(err)
+		return AccountData{}, err
+	}
+
+	return created, nil
 }

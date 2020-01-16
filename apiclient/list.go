@@ -1,10 +1,11 @@
 package apiclient
 
 import (
+	"encoding/json"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"net/url"
-	"log"
 )
 
 // ListParams are optional parameters used to call the List endpoint
@@ -13,7 +14,7 @@ type ListParams struct {
 }
 
 // List accepts optional parameters and lists all accounts
-func (a *APIClient) List(params ListParams) (response string, err error) {
+func (a *APIClient) List(params ListParams) (accountList AccountListData, err error) {
 
 	rel := &url.URL{Path: "/v1/organisation/accounts"}
 	url := a.BaseURL.ResolveReference(rel)
@@ -22,13 +23,13 @@ func (a *APIClient) List(params ListParams) (response string, err error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountListData{}, err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountListData{}, err
 	}
 
 	defer resp.Body.Close()
@@ -36,13 +37,16 @@ func (a *APIClient) List(params ListParams) (response string, err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return "", err
+		return AccountListData{}, err
 	}
 
-	return string(body), nil
+	err = json.Unmarshal(body, &accountList)
+	if err != nil {
+		log.Println(err)
+		return AccountListData{}, err
+	}
+	return accountList, nil
 }
-
-
 
 //EncodeOptionalQueryParameters takes optional parameters and encodes them into a query string
 func EncodeOptionalQueryParameters(params ListParams) (queryString string) {

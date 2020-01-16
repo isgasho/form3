@@ -5,6 +5,18 @@ type AccountData struct {
 	Data Account `json:"data"`
 }
 
+// AccountListData contains the data for multiple accounts
+type AccountListData struct {
+	Data []Account `json:"data"`
+	Links PageLinks
+}
+
+//PageLinks contains the links to paginated data
+type PageLinks struct {
+	First string `json:"first"`
+	Last string `json:"last"`
+	Self string `json:"self"`
+}
 // Account represents a registered bank account
 type Account struct {
 	AccountType    string `json:"type"`

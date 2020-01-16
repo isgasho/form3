@@ -17,7 +17,7 @@ func TestAPIClientCanCreate(t *testing.T) {
 	validAccountData := apiclient.AccountData{
 		Data: apiclient.Account{
 			AccountType:    "accounts",
-			ID:             "bd27e265-9605-4b4b-a0e5-3003ea9cc4dc",
+			ID:             "dd27e265-9605-4b4b-a0e5-3003ea9cc4dc",
 			OrganisationID: "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
 			Attributes: apiclient.AccountAttributes{
 				Country:                     "GB",
@@ -49,7 +49,7 @@ func TestAPIClientCanCreate(t *testing.T) {
 		expectedRequestBody := `{` +
 			`"data":{` +
 			`"type":"accounts",` +
-			`"id":"bd27e265-9605-4b4b-a0e5-3003ea9cc4dc",` +
+			`"id":"dd27e265-9605-4b4b-a0e5-3003ea9cc4dc",` +
 			`"organisation_id":"eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",` +
 			`"Attributes":{"country":"GB",` +
 			`"base_currency":"GBP",` +
@@ -71,7 +71,29 @@ func TestAPIClientCanCreate(t *testing.T) {
 		body, _ := ioutil.ReadAll(req.Body)
 		assert.Equal(t, expectedRequestBody, string(body))
 
-		rw.Write([]byte("ok"))
+		responseJSON := `{` +
+		`"data":{` +
+		`"type":"accounts",` +
+		`"id":"dd27e265-9605-4b4b-a0e5-3003ea9cc4dc",` +
+		`"organisation_id":"eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",` +
+		`"Attributes":{"country":"GB",` +
+		`"base_currency":"GBP",` +
+		`"account_number":"41426819",` +
+		`"bank_id":"400300",` +
+		`"bank_id_code":"GBDSC",` +
+		`"bic":"NWBKGB22",` +
+		`"iban":"GB11NWBK40030041426819",` +
+		`"title":"Ms",` +
+		`"first_name":"Samantha",` +
+		`"bank_account_name":"Samantha Holder",` +
+		`"alternative_bank_account_names":["Sam Holder"],` +
+		`"account_classification":"Personal",` +
+		`"joint_account":false,` +
+		`"account_matching_opt_out":false,` +
+		`"secondary_identification":"A1B2C3D4"` +
+		`}}}`
+
+		rw.Write([]byte(responseJSON))
 	}))
 
 	testServerURL, _ := url.Parse(testServer.URL)
@@ -83,7 +105,7 @@ func TestAPIClientCanCreate(t *testing.T) {
 	response, err := apiClient.Create(validAccountData)
 
 	//5. And the APIClient receives a response from the API
-	assert.Equal(t, "ok", response)
+	assert.Equal(t, validAccountData, response)
 	assert.Equal(t, nil, err)
 }
 
@@ -123,7 +145,7 @@ func TestCreateCanHandleHTTPErrors(t *testing.T) {
 	response, err := apiClient.Create(validAccountData)
 
 	//4. Then the response is empty
-	assert.Equal(t, "", response)
+	assert.Equal(t, apiclient.AccountData{}, response)
 	
 	//5. And the err is an error containing the mocked error message
 	assert.NotEqual(t, nil, err)
