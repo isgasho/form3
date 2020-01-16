@@ -38,10 +38,11 @@ func TestAPIClientCanList(t *testing.T) {
 	apiClient.BaseURL = testServerURL
 
 	//3. When a the APIClient makes a List request
-	response := apiClient.List(params)
+	response, err := apiClient.List(params)
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+	assert.Equal(t, nil, err)
 }
 
 func TestListCanHandleHTTPErrors(t *testing.T) {
@@ -54,10 +55,13 @@ func TestListCanHandleHTTPErrors(t *testing.T) {
 	apiClient.HTTPClient = MockHttpClient{}
 
 	//3. and APIClient makes a List request 
-	response := apiClient.List(params)
+	response, err := apiClient.List(params)
 
 	//4. Then the response is the error message
 	assert.Equal(t, "This is a mocked error", response)
+
+	//5. And the err is an error
+	assert.NotEqual(t, nil, err)
 }
 
 

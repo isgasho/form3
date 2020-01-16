@@ -80,10 +80,11 @@ func TestAPIClientCanCreate(t *testing.T) {
 	apiClient.BaseURL = testServerURL
 
 	//3. When a the APIClient makes a Create request with valid account data
-	response := apiClient.Create(validAccountData)
+	response, err := apiClient.Create(validAccountData)
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+	assert.Equal(t, nil, err)
 }
 
 func TestCreateCanHandleHTTPErrors(t *testing.T) {
@@ -119,8 +120,11 @@ func TestCreateCanHandleHTTPErrors(t *testing.T) {
 	apiClient.HTTPClient = MockHttpClient{}
 
 	//3. and APIClient makes a Create request with valid account data
-	response := apiClient.Create(validAccountData)
+	response, err := apiClient.Create(validAccountData)
 
 	//4. Then the response is the error message
 	assert.Equal(t, "This is a mocked error", response)
+	
+	//5. And the err is an error
+	assert.NotEqual(t, nil, err)
 }

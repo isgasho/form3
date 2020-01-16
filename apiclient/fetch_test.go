@@ -33,10 +33,11 @@ func TestAPIClientCanFetch(t *testing.T) {
 	apiClient.BaseURL = testServerURL
 
 	//3. When a the APIClient makes a Fetch request for the accountID
-	response := apiClient.Fetch(accountID)
+	response, err := apiClient.Fetch(accountID)
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+	assert.Equal(t, nil, err)
 }
 
 func TestFetchCanHandleHTTPErrors(t *testing.T) {
@@ -49,8 +50,11 @@ func TestFetchCanHandleHTTPErrors(t *testing.T) {
 	apiClient.HTTPClient = MockHttpClient{}
 
 	//3. and APIClient makes a Fetch request for the accountID
-	response := apiClient.Fetch(accountID)
+	response, err := apiClient.Fetch(accountID)
 
 	//4. Then the response is the error message
 	assert.Equal(t, "This is a mocked error", response)
+	
+	//5. And the err is an error
+	assert.NotEqual(t, nil, err)
 }

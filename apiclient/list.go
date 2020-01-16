@@ -1,7 +1,6 @@
 package apiclient
 
 import (
-	"fmt"
 	"io/ioutil"
 	"net/http"
 	"net/url"
@@ -13,7 +12,7 @@ type ListParams struct {
 }
 
 // List accepts optional parameters and lists all accounts
-func (a *APIClient) List(params ListParams) (response string) {
+func (a *APIClient) List(params ListParams) (response string, err error) {
 
 	rel := &url.URL{Path: "/account"}
 	url := a.BaseURL.ResolveReference(rel)
@@ -21,25 +20,22 @@ func (a *APIClient) List(params ListParams) (response string) {
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
-	return string(body)
+	return string(body), nil
 }
 
 

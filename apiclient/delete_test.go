@@ -32,10 +32,11 @@ func TestAPIClientCanDelete(t *testing.T) {
 	apiClient.BaseURL = testServerURL
 
 	//3. When a the APIClient makes a Delete request for the accountID and version
-	response := apiClient.Delete(accountID, version)
+	response, err := apiClient.Delete(accountID, version)
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+	assert.Equal(t, nil, err)
 }
 
 func TestDeleteCanHandleHTTPErrors(t *testing.T) {
@@ -48,8 +49,11 @@ func TestDeleteCanHandleHTTPErrors(t *testing.T) {
 	apiClient.HTTPClient = MockHttpClient{}
 
 	//3. and APIClient makes a Delete request for the accountID and version
-	response := apiClient.Delete(accountID, version)
+	response, err := apiClient.Delete(accountID, version)
 
 	//4. Then the response is the error message
 	assert.Equal(t, "This is a mocked error", response)
+
+	//5. And the err is an error
+	assert.NotEqual(t, nil, err)
 }

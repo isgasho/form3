@@ -8,7 +8,7 @@ import (
 )
 
 // Delete deletes an account
-func (a *APIClient) Delete(accountID string, version int) (response string) {
+func (a *APIClient) Delete(accountID string, version int) (response string, err error) {
 
 	path := fmt.Sprintf("/account/%s", accountID)
 
@@ -21,14 +21,13 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 
 	req, err := http.NewRequest("DELETE", deleteURL.String(), nil)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
 	defer resp.Body.Close()
@@ -36,8 +35,8 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return err.Error()
+		return err.Error(), err
 	}
 
-	return string(body)
+	return string(body), nil
 }
