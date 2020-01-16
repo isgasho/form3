@@ -18,19 +18,19 @@ func (a *APIClient) Create(account AccountData) (response string) {
 	json, err := json.Marshal(account)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	req, err := http.NewRequest("POST", url.String(), bytes.NewBuffer(json))
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
-	resp, err := a.httpClient.Do(req)
+	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	defer resp.Body.Close()
@@ -38,7 +38,7 @@ func (a *APIClient) Create(account AccountData) (response string) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	return string(body)

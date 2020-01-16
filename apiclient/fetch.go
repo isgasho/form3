@@ -17,21 +17,21 @@ func (a *APIClient) Fetch(accountID string) (response string) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
-	resp, err := a.httpClient.Do(req)
+	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	defer resp.Body.Close()
-	
+
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	return string(body)

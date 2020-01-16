@@ -44,6 +44,23 @@ func TestAPIClientCanList(t *testing.T) {
 	assert.Equal(t, "ok", response)
 }
 
+func TestListCanHandleHTTPErrors(t *testing.T) {
+
+	//1. Given valid parameters for a List request
+	params := apiclient.ListParams{PageNum: &zero, PageSize: &one}
+
+	//2. When the HTTPClient is mocked to return an error
+	apiClient := apiclient.New()
+	apiClient.HTTPClient = MockHttpClient{}
+
+	//3. and APIClient makes a List request 
+	response := apiClient.List(params)
+
+	//4. Then the response is the error message
+	assert.Equal(t, "This is a mocked error", response)
+}
+
+
 func TestEncodeOptionalQueryParametersString(t *testing.T) {
 
 	//1. Given some parameters

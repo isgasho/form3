@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
+
 func TestAPIClientCanFetch(t *testing.T) {
 
 	//1. Given a valid accountID
@@ -36,4 +37,20 @@ func TestAPIClientCanFetch(t *testing.T) {
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+}
+
+func TestFetchCanHandleHTTPErrors(t *testing.T) {
+
+	//1. Given a valid accountID
+	accountID := "ad27e265-9605-4b4b-a0e5-3003ea9cc4dc"
+
+	//2. When the HTTPClient is mocked to return an error
+	apiClient := apiclient.New()
+	apiClient.HTTPClient = MockHttpClient{}
+
+	//3. and APIClient makes a Fetch request for the accountID
+	response := apiClient.Fetch(accountID)
+
+	//4. Then the response is the error message
+	assert.Equal(t, "This is a mocked error", response)
 }

@@ -22,13 +22,13 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 	req, err := http.NewRequest("DELETE", deleteURL.String(), nil)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
-	resp, err := a.httpClient.Do(req)
+	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	defer resp.Body.Close()
@@ -36,7 +36,7 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		return ""
+		return err.Error()
 	}
 
 	return string(body)

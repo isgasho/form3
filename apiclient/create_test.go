@@ -79,9 +79,48 @@ func TestAPIClientCanCreate(t *testing.T) {
 	apiClient := apiclient.New()
 	apiClient.BaseURL = testServerURL
 
-	//3. When a the APIClient makes a Create request with validAccountData
+	//3. When a the APIClient makes a Create request with valid account data
 	response := apiClient.Create(validAccountData)
 
 	//5. And the APIClient receives a response from the API
 	assert.Equal(t, "ok", response)
+}
+
+func TestCreateCanHandleHTTPErrors(t *testing.T) {
+
+	//1. Given a valid account data
+	validAccountData := apiclient.AccountData{
+		Data: apiclient.Account{
+			AccountType:    "accounts",
+			ID:             "bd27e265-9605-4b4b-a0e5-3003ea9cc4dc",
+			OrganisationID: "eb0bd6f5-c3f5-44b2-b677-acd23cdde73c",
+			Attributes: apiclient.AccountAttributes{
+				Country:                     "GB",
+				BaseCurrency:                "GBP",
+				AccountNumber:               "41426819",
+				BankID:                      "400300",
+				BankIDCode:                  "GBDSC",
+				Bic:                         "NWBKGB22",
+				Iban:                        "GB11NWBK40030041426819",
+				Title:                       "Ms",
+				FirstName:                   "Samantha",
+				BankAccountName:             "Samantha Holder",
+				AlternativeBankAccountNames: []string{"Sam Holder"},
+				AccountClassification:       "Personal",
+				JointAccount:                false,
+				AccountMatchingOptOut:       false,
+				SecondaryIdentification:     "A1B2C3D4",
+			},
+		},
+	}
+
+	//2. When the HTTPClient is mocked to return an error
+	apiClient := apiclient.New()
+	apiClient.HTTPClient = MockHttpClient{}
+
+	//3. and APIClient makes a Create request with valid account data
+	response := apiClient.Create(validAccountData)
+
+	//4. Then the response is the error message
+	assert.Equal(t, "This is a mocked error", response)
 }
