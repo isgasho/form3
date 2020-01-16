@@ -3,6 +3,7 @@ package apiclient
 import (
 	"net/url"
 	"net/http"
+	"time"
 )
 
 var (
@@ -17,5 +18,10 @@ type APIClient struct {
 
 // New creates a new instance of an APIclient
 func New() *APIClient {
-	return &APIClient{BaseURL: defaultBaseURL, httpClient: &http.Client{}}
+	return &APIClient{
+		BaseURL: defaultBaseURL, 
+		httpClient: &http.Client{
+			Timeout: 10 * time.Second,
+		},
+	}
 }

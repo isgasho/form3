@@ -9,6 +9,8 @@ interact with it, i.e. only access code which has been declared public (starting
 I have placed the code for each `apiclient` operation `create`, `fetch`, `list` and `delete` in a separate Go files. 
 This is to increase readability and aid debugging i.e. if `Fetch()` caused an error, it would be make sense for the reader to look in `fetch.go`
 
+The core Go team did not set any timeouts on the standard `net/http` client so I have configured the http client to use a sensible timeout of 10 seconds in `client.go`
+
 To help ensure a valid request body is passed to the `create` endpoint I have included a struct representing Account data in `models.go`. I use this struct to marshal values to JSON to form the body of the POST request to the endpoint. I have chosen to expose this struct within the package so that other packages can reuse it for marshalling/unmarshalling.
 
 For the optional parameters which can be passed to the `list` endpoint I chose to store these inside a struct using *int. I chose to use pointers to int as this type can differentiate between 0 and nil
