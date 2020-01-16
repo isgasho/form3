@@ -11,7 +11,7 @@ import (
 // Fetch gets a single account using the accountID
 func (a *APIClient) Fetch(accountID string) (response string, err error) {
 
-	path := fmt.Sprintf("/account/%s", accountID)
+	path := fmt.Sprintf("/v1/organisation/accounts/%s", accountID)
 	rel := &url.URL{Path: path}
 	url := a.BaseURL.ResolveReference(rel)
 

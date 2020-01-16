@@ -4,23 +4,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"net/url"
 	"log"
 )
 
 // Delete deletes an account
 func (a *APIClient) Delete(accountID string, version int) (response string, err error) {
 
-	path := fmt.Sprintf("/account/%s", accountID)
+	url := fmt.Sprintf(a.BaseURL.String()+"/v1/organisation/accounts/%s?version=%d", accountID, version)
 
-	rel := &url.URL{Path: path}
-	deleteURL := a.BaseURL.ResolveReference(rel)
-
-	query := url.Values{}
-	query.Add("version", string(version))
-	deleteURL.RawQuery = query.Encode()
-
-	req, err := http.NewRequest("DELETE", deleteURL.String(), nil)
+	req, err := http.NewRequest("DELETE", url, nil)
 	if err != nil {
 		log.Println(err)
 		return "", err

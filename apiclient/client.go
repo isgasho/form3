@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	defaultBaseURL, _  = url.Parse("http://localhost:8080/v1/organisation")
+	defaultBaseURL, _  = url.Parse("http://localhost:8080")
 )
 
 type httpClientIface interface {

@@ -15,7 +15,7 @@ type ListParams struct {
 // List accepts optional parameters and lists all accounts
 func (a *APIClient) List(params ListParams) (response string, err error) {
 
-	rel := &url.URL{Path: "/account"}
+	rel := &url.URL{Path: "/v1/organisation/accounts"}
 	url := a.BaseURL.ResolveReference(rel)
 	url.RawQuery = EncodeOptionalQueryParameters(params)
 

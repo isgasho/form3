@@ -43,7 +43,7 @@ func TestAPIClientCanCreate(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
 		//4. Then the testserver asserts that the correct request has been received
-		assert.Equal(t, "/account", req.URL.String())
+		assert.Equal(t, "/v1/organisation/accounts", req.URL.String())
 		assert.Equal(t, "POST", req.Method)
 
 		expectedRequestBody := `{` +

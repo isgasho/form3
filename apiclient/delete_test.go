@@ -19,7 +19,7 @@ func TestAPIClientCanDelete(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
 		//4. Then the testserver asserts that the correct request has been received
-		assert.Equal(t, "/account/ad27e265-9605-4b4b-a0e5-3003ea9cc4dc?version=%01", req.URL.String())
+		assert.Equal(t, "/v1/organisation/accounts/ad27e265-9605-4b4b-a0e5-3003ea9cc4dc?version=1", req.URL.String())
 		assert.Equal(t, "DELETE", req.Method)
 		assert.Equal(t, http.NoBody, req.Body)
 

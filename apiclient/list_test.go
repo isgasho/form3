@@ -25,7 +25,7 @@ func TestAPIClientCanList(t *testing.T) {
 	testServer := httptest.NewServer(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 
 		//4. Then the testserver asserts that the correct request has been received
-		assert.Equal(t, "/account?page%5Bnumber%5D=%00&page%5Bsize%5D=%01", req.URL.String())
+		assert.Equal(t, "/v1/organisation/accounts?page%5Bnumber%5D=%00&page%5Bsize%5D=%01", req.URL.String())
 		assert.Equal(t, "GET", req.Method)
 		assert.Equal(t, http.NoBody, req.Body)
 

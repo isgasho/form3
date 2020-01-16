@@ -12,7 +12,7 @@ import (
 // Create registers an existing bank account or creates a new one
 func (a *APIClient) Create(account AccountData) (response string, err error) {
 
-	rel := &url.URL{Path: "/account"}
+	rel := &url.URL{Path: "/v1/organisation/accounts"}
 	url := a.BaseURL.ResolveReference(rel)
 
 	json, err := json.Marshal(account)
