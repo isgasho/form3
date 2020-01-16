@@ -9,7 +9,7 @@ import (
 type MockHttpClient struct {
 }
 
-//Do will always return an error
+//Do is mocked to always return an error
 func (m MockHttpClient) Do(req *http.Request) (*http.Response, error) {
 	err := errors.New("This is a mocked error")
 	return &http.Response{}, err

@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"log"
 )
 
 // Delete deletes an account
@@ -21,21 +22,22 @@ func (a *APIClient) Delete(accountID string, version int) (response string, err 
 
 	req, err := http.NewRequest("DELETE", deleteURL.String(), nil)
 	if err != nil {
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		fmt.Println(err)
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	return string(body), nil

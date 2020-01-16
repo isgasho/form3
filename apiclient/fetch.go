@@ -18,13 +18,13 @@ func (a *APIClient) Fetch(accountID string) (response string, err error) {
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
 		log.Println(err)
-		return err.Error(), err
+		return "", err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
 		log.Println(err)
-		return err.Error(), err
+		return "", err
 	}
 
 	defer resp.Body.Close()
@@ -32,7 +32,7 @@ func (a *APIClient) Fetch(accountID string) (response string, err error) {
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		log.Println(err)
-		return err.Error(), err
+		return "", err
 	}
 
 	return string(body), nil

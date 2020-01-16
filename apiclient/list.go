@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"net/url"
+	"log"
 )
 
 // ListParams are optional parameters used to call the List endpoint
@@ -20,19 +21,22 @@ func (a *APIClient) List(params ListParams) (response string, err error) {
 
 	req, err := http.NewRequest("GET", url.String(), nil)
 	if err != nil {
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	resp, err := a.HTTPClient.Do(req)
 	if err != nil {
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	defer resp.Body.Close()
 
 	body, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return err.Error(), err
+		log.Println(err)
+		return "", err
 	}
 
 	return string(body), nil

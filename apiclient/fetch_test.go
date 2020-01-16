@@ -52,9 +52,10 @@ func TestFetchCanHandleHTTPErrors(t *testing.T) {
 	//3. and APIClient makes a Fetch request for the accountID
 	response, err := apiClient.Fetch(accountID)
 
-	//4. Then the response is the error message
-	assert.Equal(t, "This is a mocked error", response)
+	//4. Then the response is empty
+	assert.Equal(t, "", response)
 	
-	//5. And the err is an error
+	//5. And the err is an error containing the mocked error message
 	assert.NotEqual(t, nil, err)
+	assert.Equal(t, "This is a mocked error", err.Error())
 }
