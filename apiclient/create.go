@@ -22,6 +22,7 @@ func (a *APIClient) Create(account AccountData) (response string) {
 	resp, err := a.httpClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
+		return ""
 	}
 
 	defer resp.Body.Close()

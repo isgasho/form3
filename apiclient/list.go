@@ -24,6 +24,7 @@ func (a *APIClient) List(params ListParams) (response string) {
 	resp, err := a.httpClient.Do(req)
 	if err != nil {
 		fmt.Println(err)
+		return ""
 	}
 
 	defer resp.Body.Close()
