@@ -19,7 +19,11 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 	query.Add("version", string(version))
 	deleteURL.RawQuery = query.Encode()
 
-	req, _ := http.NewRequest("DELETE", deleteURL.String(), nil)
+	req, err := http.NewRequest("DELETE", deleteURL.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	resp, err := a.httpClient.Do(req)
 	if err != nil {
@@ -29,7 +33,11 @@ func (a *APIClient) Delete(accountID string, version int) (response string) {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	return string(body)
 }

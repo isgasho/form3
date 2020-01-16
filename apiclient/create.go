@@ -15,9 +15,17 @@ func (a *APIClient) Create(account AccountData) (response string) {
 	rel := &url.URL{Path: "/account"}
 	url := a.BaseURL.ResolveReference(rel)
 
-	json, _ := json.Marshal(account)
+	json, err := json.Marshal(account)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	req, err := http.NewRequest("POST", url.String(), bytes.NewBuffer(json))
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	resp, err := a.httpClient.Do(req)
 	if err != nil {
@@ -27,7 +35,11 @@ func (a *APIClient) Create(account AccountData) (response string) {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	return string(body)
 }

@@ -19,7 +19,11 @@ func (a *APIClient) List(params ListParams) (response string) {
 	url := a.BaseURL.ResolveReference(rel)
 	url.RawQuery = EncodeOptionalQueryParameters(params)
 
-	req, _ := http.NewRequest("GET", url.String(), nil)
+	req, err := http.NewRequest("GET", url.String(), nil)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	resp, err := a.httpClient.Do(req)
 	if err != nil {
@@ -29,7 +33,11 @@ func (a *APIClient) List(params ListParams) (response string) {
 
 	defer resp.Body.Close()
 
-	body, _ := ioutil.ReadAll(resp.Body)
+	body, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		fmt.Println(err)
+		return ""
+	}
 
 	return string(body)
 }
